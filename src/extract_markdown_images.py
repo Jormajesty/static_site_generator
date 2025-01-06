@@ -18,4 +18,20 @@ def extract_markdown_images(text):
 
     return matches
 
-# Example usage
+def extract_markdown_links(text):
+    """
+    Extracts all markdown links from the given text.
+
+    Args:
+        text (str): Raw markdown text.
+
+    Returns:
+        list: A list of tuples where each tuple contains the link text and the URL of a link.
+    """
+    # Regular expression to match markdown link syntax: [link text](URL)
+    pattern = r'\[(.*?)\]\((.*?)\)'
+
+    # Find all matches in the text
+    matches = re.findall(pattern, text)
+
+    return matches
