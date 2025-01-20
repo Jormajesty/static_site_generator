@@ -1,19 +1,25 @@
-from split_functions import split_nodes_delimiter, split_nodes_link
-from textnode import TextNode, TextType
 
+import os
+import shutil
 
-print("hello world!")
+from directory_functions import generate_page, copy_files_recursive, generate_pages_recursive
+
+dir_path_static = "./static"
+dir_path_public = "./public"
+dir_path_content = "./content"
+template_path = "./template.html"
+
 
 def main():
-    # node = TextNode("This is a text node", TextType.BOLD, "https://www.boot.dev")
-    # markdown_node = TextNode(
-    #         "This is text with a **bolded word** and **another**", TextType.TEXT
-    #     )
-    # new_nodes = split_nodes_delimiter([markdown_node], "**", TextType.CODE)
-    node = TextNode(
-    "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
-    TextType.TEXT,
-)
-    new_nodes = split_nodes_link([node])
+    print("Deleting public directory...")
+    if os.path.exists(dir_path_public):
+        shutil.rmtree(dir_path_public)
 
-main()
+    print("Copying static files to public directory...")
+    copy_files_recursive(dir_path_static, dir_path_public)
+
+    print("Generating content...")
+    generate_pages_recursive(dir_path_content, template_path, dir_path_public)
+    
+if __name__ == "__main__":
+    main()

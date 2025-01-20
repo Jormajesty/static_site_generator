@@ -2,6 +2,13 @@ import re
 from extract_markdown_images import extract_markdown_images, extract_markdown_links
 from textnode import TextType, TextNode
 
+block_type_paragraph = "paragraph"
+block_type_heading = "heading"
+block_type_code = "code"
+block_type_quote = "quote"
+block_type_olist = "ordered_list"
+block_type_ulist = "unordered_list"
+
 def text_to_textnodes(text):
     nodes = [TextNode(text, TextType.TEXT)]
     nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
@@ -85,25 +92,15 @@ def split_nodes_link(old_nodes):
     return new_nodes
 
 def markdown_to_blocks(markdown):
-    """
-    Splits a raw Markdown string into separate block strings.
+    blocks = markdown.split("\n\n")
+    filtered_blocks = []
+    for block in blocks:
+        if block == "":
+            continue
+        block = block.strip()
+        filtered_blocks.append(block)
+    return filtered_blocks
 
-    Args:
-        markdown (str): The input Markdown string representing a full document.
-
-    Returns:
-        list: A list of block strings extracted from the Markdown text.
-    """
-    # Match two or more consecutive newlines (handles \n and \r\n)
-    block_pattern = r'(\r?\n){2,}'
-
-    # Split the Markdown text into blocks
-    blocks = re.split(block_pattern, markdown)
-
-    # Remove empty blocks or excessive whitespace
-    blocks = [block.strip() for block in blocks if block.strip()]
-
-    return blocks
 
 def extract_title(markdown):
     """
